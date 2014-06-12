@@ -34,4 +34,4 @@ In order to run the app you need node-webkit (as listed above). The easiest way 
 
 ## Licence
 
-See [LICENCE.txt](LICENSE.txt)
+See [LICENSE.txt](https://github.com/rigor789/Rirc/blob/master/LICENSE.txt)
