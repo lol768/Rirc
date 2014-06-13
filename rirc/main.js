@@ -28,6 +28,20 @@ global.clients      = {};
 $.each(global.settings.networks, function(key, value) {
     $("#status").html("Connecting to " + value.ip);
     global.clients[key] = value;
+    global.clients[key].print = function(message, sender) {
+        sender = typeof sender !== 'undefined' ? sender : "*";
+        var d = new Date();
+        var time = "[" + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + "] ";
+        var list = $("#chatlist");
+        list.append('<tr>' +
+                              '<td class="timestamp">' + time + '</td>' +
+                              '<td class="nickname text-right">' + sender + ':</td>' +
+                              '<td class="message"><pre>' + message + '</pre></td>' + 
+                              '</tr>');
+        var chatbuffer = $("#chatbuffer");
+        chatbuffer.scrollTop(list[0].scrollHeight);
+    };
+    global.clients[key].print("Connecting to " + value.ip + " as " + global.settings.nickname);
     global.clients[key].client  = new irc.Client(value.ip, global.settings.nickname, {
                                     channels: value.channels,
                                   });
@@ -36,17 +50,6 @@ $.each(global.settings.networks, function(key, value) {
 console.log(global.clients);
 
 $.each(global.clients, function(key, value) {
-    value.print = function(message, sender) {
-        sender = typeof sender !== 'undefined' ? sender : "*";
-        var d = new Date();
-        var time = "[" + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + "] ";
-        $("#chatlist").append('<tr>' +
-                              '<td class="timestamp col-xs-1">' + time + '</td>' +
-                              '<td class="nickname text-right col-xs-1">' + sender + ':</td>' +
-                              '<td class="message"><pre>' + message + '</pre></td>' + 
-                              '</tr>');
-    };
-    
     var client = value.client;
     client.addListener('message', function (from, to, message) {
         console.log(from + ' => ' + to + ': ' + message);
@@ -59,22 +62,38 @@ $.each(global.clients, function(key, value) {
     });
 
     client.addListener('names', function(channel, nicks) {
-        console.log('nicks: ', channel, nicks);
-        var formatted;
+        console.log(nicks);
+        var formatted = "Connected users: ";
         $.each(nicks, function(nick, perms) {
             formatted += nick + " ";          
         });
-        value.print("Connected users: " + formatted);
+        value.print(formatted);
     });
                     
     client.addListener('registered', function(message) {
 //{"prefix":"warden.esper.net","server":"warden.esper.net","command":"rpl_welcome","rawCommand":"001","commandType":"reply","args":["rirc","Welcome to the EsperNet Internet Relay Chat Network rirc"]}    
-        value.print(message.args[1], message.prefix);     
+        value.print("Connected to " + message.server + " as " + global.settings.nickname);
+        value.print(message.args[1], message.prefix);   
     });
                     
     client.addListener('motd', function(motd) {
-// 
         value.print(motd);     
+    });
+
+    client.addListener('topic', function(channel, topic, nick, message) {
+        console.log(message);
+        var time = new Date(message.args[3] * 1000);
+        value.print("Topic set by " + message.args[2] + " on " + time.toTimeString() + " - " + topic, message.prefix);     
+    });
+                    
+    client.addListener('join', function(channel, nick, message) {
+        console.log(message);
+        value.print(nick + " joined " + channel, message.prefix);     
+    });
+                    
+    client.addListener('part', function(channel, nick, reason, message) {
+        console.log(message);
+        value.print(nick + " left " + channel, message.prefix);     
     });
 });
 
@@ -111,8 +130,10 @@ window.onload = function() {
     $("input").keydown(function(event) {
         if (event.keyCode === 13) {
             event.preventDefault();
-            client = global.clients[global.clients.current].client;
-            client.say("#rirc", $(this).val());
+            var message = $(this).val();
+            var client = global.clients[global.clients.current].client;
+            global.clients[global.clients.current].print(message, global.settings.nickname);
+            client.say("#rirc", message );
             $(this).val("");
         }
     });

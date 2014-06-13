@@ -12,18 +12,25 @@
     border-radius: 0;
 }
 
-#chatlist td {
-    color: red;
+#chatlist {
+    table-layout: fixed;
+    width: 100%
+    max-width: 100%;
 }
 
 #chatlist td.timestamp {
+    width: 5%;
     color: green;
 }
 
 #chatlist td.nickname {
+    width: 15%;
     color: blue;
+    overflow: hidden;
+    text-overflow: ellipsis;    
 }
 
 #chatlist td.message {
+    width: 80%;
     color: gray;
 }
