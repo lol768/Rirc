@@ -63,7 +63,7 @@ $.each(global.clients, function(key, value) {
 
     client.addListener('names', function(channel, nicks) {
         console.log(nicks);
-        var formatted = "Connected users: ";
+        var formatted = 'Connected users: ';
         $.each(nicks, function(nick, perms) {
             formatted += nick + " ";          
         });
@@ -72,28 +72,33 @@ $.each(global.clients, function(key, value) {
                     
     client.addListener('registered', function(message) {
 //{"prefix":"warden.esper.net","server":"warden.esper.net","command":"rpl_welcome","rawCommand":"001","commandType":"reply","args":["rirc","Welcome to the EsperNet Internet Relay Chat Network rirc"]}    
-        value.print("Connected to " + message.server + " as " + global.settings.nickname);
+        value.print('Connected to ' + message.server + ' as ' + global.settings.nickname);
         value.print(message.args[1], message.prefix);   
     });
                     
     client.addListener('motd', function(motd) {
-        value.print(motd);     
+        value.print(motd);
     });
 
     client.addListener('topic', function(channel, topic, nick, message) {
         console.log(message);
         var time = new Date(message.args[3] * 1000);
-        value.print("Topic set by " + message.args[2] + " on " + time.toTimeString() + " - " + topic, message.prefix);     
+        value.print('Topic set by ' + message.args[2] + ' on ' + time.toTimeString() + ' - ' + topic, message.prefix);     
     });
                     
     client.addListener('join', function(channel, nick, message) {
         console.log(message);
-        value.print(nick + " joined " + channel, message.prefix);     
+        value.print(nick + " joined " + channel);     
     });
                     
     client.addListener('part', function(channel, nick, reason, message) {
         console.log(message);
-        value.print(nick + " left " + channel, message.prefix);     
+        value.print(nick + ' left ' + channel + '(' + reason + ')');     
+    });
+                    
+    client.addListener('quit', function(nick, reason, channels, message) {
+        console.log(message);
+        value.print(nick + ' left ' + channel + '(' + reason + ')');     
     });
 });
 
