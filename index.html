@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rirc - IRC client by rigor789</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/rirc.css">
+    <link rel="stylesheet" href="public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="public/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="public/css/font-awesome.min.css">
+    <link rel="stylesheet" href="public/css/style.css">
+    <link rel="stylesheet" href="public/css/rirc.css">
+    <link rel="stylesheet" href="public/css/chat.css">
 </head>
 <body>
 <div class="titlebar">
@@ -47,13 +48,16 @@
 	            <h1><i class="fa fa-weixin"></i> Chat</h1>
 	        </div>
             <div class="contentpane">
-                <ul id="chatlist" class="chat">
-                    <li>[20:33] someone: Hey!</li>
-                    <li>[20:33] someone2: Hey!</li>
-                    <li>[20:33] someone3: Hey!</li>
-                    <li>[20:33] someone4: Hey!</li>
-                    <li>[20:33] someone5: Hey!</li>
-                </ul>
+                <!--<ul id="chatlist" class="chat">
+                    <li><span class="timestamp">[20:33]</span><span class="nickname">someone</span>: <span class="message">Hey!</span></li>
+                </ul>-->
+                <table id="chatlist" class="chat table table-condensed">
+                    <!--<tr>
+                        <td class="timestamp">[20:33]</td>
+                        <td class="nickname">someone:</td>
+                        <td class="message">Hey!</td>
+                    </tr>-->
+                </table>
             </div>
             <div class="messagebox">
                 <label for="chatbox">
@@ -85,10 +89,10 @@
     <p class="pull-right">Connected as: <span id="user">-</span></p>
 </div>
 
-<script type="application/javascript" src="js/jquery-1.11.1.min.js"></script>
-<script type="application/javascript" src="js/bootstrap.min.js"></script>
-<script type="application/javascript" src="js/app/main.js"></script>
-<script type="application/javascript" src="js/app/winstate.js"></script>
+<script type="application/javascript" src="public/js/jquery-1.11.1.min.js"></script>
+<script type="application/javascript" src="public/js/bootstrap.min.js"></script>
+<script type="application/javascript" src="rirc/main.js"></script>
+<script type="application/javascript" src="rirc/winstate.js"></script>
 <script type="application/javascript">
 	require("nw.gui").Window.get().show();
 </script>

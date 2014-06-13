@@ -84,7 +84,7 @@ ul.channels li a:hover {
     margin: 5px 0;
 }
 
-ul.chat {
+table.chat {
     -webkit-user-select: text;
     width: 100% !important;
     list-style: none;
