@@ -32,6 +32,7 @@ body {
 
 .titlebar {
   	-webkit-app-region: drag;
+
 	height: 30px;
 	width: 100%;
 	background: #666666;
